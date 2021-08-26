@@ -120,3 +120,5 @@ for(i in 1:length(my_comp_scores)) {
 # esempio di apply per frequenze
 apply(my_bfi[c("O1", "O2")], 2, table)
 
+
+save.image("./data_wra.RData")
