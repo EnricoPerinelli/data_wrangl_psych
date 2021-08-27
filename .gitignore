@@ -1,5 +1,5 @@
 .Rproj.user
 .Rhistory
-.RData
+#.RData
 .Ruserdata
 *pressure-1.png
