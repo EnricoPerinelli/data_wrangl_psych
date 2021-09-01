@@ -2,4 +2,4 @@
 Prova di un *repository* in **GitHub**
 
  * prova 1
- * prova 2 (locale)
+ * prova 2 (locale_remoto)
