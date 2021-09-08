@@ -10,3 +10,6 @@ Prova di un *repository* in **GitHub**
 | Y1     | Y2     |
 | Z1|Z3|
 |a1|a2|
+
+Text attributes *italic*, **bold**, 
+ `monospace`, ~~strikethrough~~
