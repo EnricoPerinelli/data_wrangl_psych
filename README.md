@@ -15,6 +15,6 @@ Text attributes *italic*, **bold**,
  `monospace`, ~~strikethrough~~
 
 ```
-prova chunk (simile a RMarkdown, ma senza sezione tra graffe)
+prova chunk (simile a RMarkdown, ma senza sezione tra graffe) LC
 ```
 
