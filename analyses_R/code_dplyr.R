@@ -3,6 +3,7 @@ library(magrittr)
 library(psych)
 
 my_bfi <- bfi
+my_bfi2 <- bfi
 
 ################################### Reverse items
 
@@ -15,6 +16,19 @@ my_bfi %<>%
          O2_rev = 7 - O2,
          O5_rev = 7 - O5)
 
+
+
+
+rev_item <- c("A1", "C4", "C5", "E1", "E2", "02", "O5")
+
+for (i in c(1:length(rev_item))) {
+  my_bfi2 %<>%
+    mutate(
+      noquote(
+      paste0(rev_item[i], "_rev", " = ", "7 - ", rev_item[i])
+      )
+      )
+}
 
 ################################### Object for each composite score
 
