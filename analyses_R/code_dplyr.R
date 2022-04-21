@@ -90,7 +90,18 @@ my_bfi %>% select(!!Neuroticism)       %>% psych::alpha(.) %>% pluck(., "total",
 my_bfi %>% select(!!Openness)          %>% psych::alpha(.) %>% pluck(., "total", "raw_alpha") %>% round(., 3)
 
 
+################################ Function to extract alpha
+my_alpha <- function(variab) {
+  my_bfi %>% 
+    select({{ variab }}) %>% 
+    psych::alpha() %>% 
+    pluck(., "total", "raw_alpha") %>%
+    round(., 2) %>% 
+    print()
+}
 
+
+my_alpha(N1:N5)
 
 
 
