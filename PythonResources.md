@@ -1,7 +1,6 @@
 # Some useful Links for Python
 
--   \[How to do R-like data manipulations using Pandas?\]
-    (https://analyticsindiamag.com/how-to-do-r-like-data-manipulations-using-pandas/)
+-   [How to do R-like data manipulations using Pandas?] (https://analyticsindiamag.com/how-to-do-r-like-data-manipulations-using-pandas/)
 
 -   \[D-Tale: One of the Best Python Libraries You Have Ever Seen\]
     (https://towardsdatascience.com/d-tale-one-of-the-best-python-libraries-you-have-ever-seen-c2deecdfd2b)
