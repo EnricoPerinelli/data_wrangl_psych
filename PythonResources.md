@@ -11,3 +11,5 @@
 -   [Combining R and Python with `reticulate` and `Quarto`](https://nrennie.rbind.io/blog/combining-r-and-python-with-reticulate-and-quarto/)
 
 -   [Exploratory Data Analysis in Python — A Step-by-Step Process](https://towardsdatascience.com/exploratory-data-analysis-in-python-a-step-by-step-process-d0dfa6bf94ee)
+
+-   [Python Pandas vs. R Dplyr](https://towardsdatascience.com/python-pandas-vs-r-dplyr-5b5081945ccb)
