@@ -15,3 +15,5 @@
 -   [Python Pandas vs. R Dplyr](https://towardsdatascience.com/python-pandas-vs-r-dplyr-5b5081945ccb)
 
 -   [Jupyter Notebook Keyboard Shortcuts](https://cheatography.com/weidadeyue/cheat-sheets/jupyter-notebook/)
+
+-   [Best figure to understand cross-validation (see the second figure)](https://scikit-learn.org/stable/modules/cross_validation.html)
