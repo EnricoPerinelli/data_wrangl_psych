@@ -1,20 +1,6 @@
-# data_wrangl_psych
-Prova di un *repository* in **GitHub**
+# Codes for Psychological Data
+In this repository, I included some functions and pipeline useful for analyzing psychological data.
 
- * prova 1
- * prova 2 (locale_remoto)
-
-| PROVA1 | PROVA 2| 
-:--------|---------:|
-| X1     | X2     |
-| Y1     | Y2     |
-| Z1|Z3|
-|a1|a2|
-
-Text attributes *italic*, **bold**, 
- `monospace`, ~~strikethrough~~
-
-```
-prova chunk (simile a RMarkdown, ma senza sezione tra graffe)
-```
-
+ * In the folder `analyses_Python` there are some codes for data wrnagling and Structural Equation Modeling with `semopy` (the script also include some useful links)
+ * In the folder `analyses_R` there are some codes and customized functions to manage and compute reliability indexes using the `tidyverse` ecosystem. This code can also be adpted for other purposes.
+ * The file `PythonResources` has some links usfeul to learn Python.
