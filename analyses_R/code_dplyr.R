@@ -1,11 +1,20 @@
+
+# Load libraries and dataset -----------------------------------------------
+
+
 library(tidyverse)
 library(magrittr)
 library(psych)
 
-my_bfi <- bfi
-my_bfi2 <- bfi
+my_bfi <- bfi  # used for longer way
+my_bfi2 <- bfi # used for reduced way
 
-################################### Reverse items
+
+# Reverse items -----------------------------------------------------------
+
+
+## Longer way -------------------------------------------------------------
+
 
 my_bfi %<>%
   mutate(A1_rev = 7 - A1,
@@ -17,29 +26,23 @@ my_bfi %<>%
          O5_rev = 7 - O5)
 
 
+## Reduced way ------------------------------------------------------------
 
 
-rev_item <- c("A1", "C4", "C5", "E1", "E2", "02", "O5")
+rev_item <- c("A1", "C4", "C5", "E1", "E2", "O2", "O5")
 
-for (i in c(1:length(rev_item))) {
+for (i in seq_along(rev_item)) {
   my_bfi2 %<>%
     mutate(
-      noquote(
-      paste0(rev_item[i], "_rev", " = ", "7 - ", rev_item[i])
-      )
+      !!sym(paste0(rev_item[i], "_rev")) := 7 - !!sym(rev_item[i])
       )
 }
 
-################################### Object for each composite score
-
-Agreeableness     <- c("A1_rev", "A2", "A3", "A4", "A5")
-Conscientiousness <- c("C1", "C2", "C3", "C4_rev", "C5_rev")
-Extraversion      <- c("E1_rev", "E2_rev", "E3", "E4", "E5")
-Neuroticism       <- c("N1", "N2", "N3", "N4", "N5")
-Openness          <- c("O1", "O2_rev", "O3", "O4", "O5_rev")
 
 
-################################### Compute Composite scores
+# Compute Composite scores ------------------------------------------------
+
+## Longer way -------------------------------------------------------------
 
 my_bfi %<>%
   rowwise() %>%
@@ -53,17 +56,61 @@ my_bfi %<>%
   ungroup()
 
 
-################################### Compute Composite scores with objects
+## Reduced way -------------------------------------------------------------
 
-my_bfi %<>% mutate(agr = rowMeans(.[c(!!Agreeableness)]),
-                   con = rowMeans(.[c(!!Conscientiousness)]),
-                   ex = rowMeans(.[c(!!Extraversion)]),
-                   neu = rowMeans(.[c(!!Neuroticism)]),
-                   op = rowMeans(.[c(!!Openness)])
-                   )
+# Store in a list (a) the name of the composite scores to be created (b) their corresponding items 
+
+composite_scores <- list(
+  Agreeableness     = c("A1_rev", "A2", "A3", "A4", "A5"),
+  Conscientiousness = c("C1", "C2", "C3", "C4_rev", "C5_rev"),
+  Extraversion      = c("E1_rev", "E2_rev", "E3", "E4", "E5"),
+  Neuroticism       = c("N1", "N2", "N3", "N4", "N5"),
+  Openness          = c("O1", "O2_rev", "O3", "O4", "O5_rev")
+)
+
+# Create a function to calculate composite scores
+
+calculate_composite <- function(data, list) {
+  for (compositeScore in names(list)) {
+    data <- data %>% 
+      mutate({{compositeScore}} := rowMeans(select(., list[[compositeScore]]), na.rm = TRUE))
+  }
+  return(data)
+}
 
 
-################################### Compute alpha
+# Use the above function
+
+my_bfi2 <- calculate_composite(
+  data = my_bfi2,
+  list = composite_scores
+  )
+
+
+# Below, the same procedure but using only a for-loop instead of creating a customized function
+
+for (new_comp_scores in names(composite_scores)) {
+  
+  my_bfi2 <- my_bfi2 %>% 
+    mutate({{new_comp_scores}} := rowMeans(select(., composite_scores[[new_comp_scores]]), na.rm = TRUE))
+  
+}
+
+
+
+# Compute Composite scores with objects
+
+my_bfi2 %<>%
+  mutate(agr = rowMeans(.[c(!!composite_scores$Agreeableness)]),
+         con = rowMeans(.[c(!!composite_scores$Conscientiousness)]),
+         ex = rowMeans(.[c(!!composite_scores$Extraversion)]),
+         neu = rowMeans(.[c(!!composite_scores$Neuroticism)]),
+         op = rowMeans(.[c(!!composite_scores$Openness)])
+  )
+
+
+# Compute alpha -----------------------------------------------------------
+
 
 my_bfi %>% select(A1_rev, A2, A3, A4, A5)     %>% psych::alpha(.) # alpha for Agreeableness
 my_bfi %>% select(C1, C2, C3, C4_rev, C5_rev) %>% psych::alpha(.) # alpha for Conscientiousness
@@ -72,78 +119,39 @@ my_bfi %>% select(N1, N2, N3, N4, N5)         %>% psych::alpha(.) # alpha for Ne
 my_bfi %>% select(O1, O2_rev, O3, O4, O5_rev) %>% psych::alpha(.) # alpha for Openness
 
 
-################################### Compute alpha by means of object
-
-my_bfi %>% select(!!Agreeableness)     %>% psych::alpha(.) # alpha for Agreeableness
-my_bfi %>% select(!!Conscientiousness) %>% psych::alpha(.) # alpha for Conscientiousness
-my_bfi %>% select(!!Extraversion)      %>% psych::alpha(.) # alpha for Extraversion
-my_bfi %>% select(!!Neuroticism)       %>% psych::alpha(.) # alpha for Neuroticism
-my_bfi %>% select(!!Openness)          %>% psych::alpha(.) # alpha for Openness
+# Compute alpha by means of object ----------------------------------------
 
 
-################################# Extract alpha
-
-my_bfi %>% select(!!Agreeableness)     %>% psych::alpha(.) %>% pluck(., "total", "raw_alpha") %>% round(., 3)
-my_bfi %>% select(!!Conscientiousness) %>% psych::alpha(.) %>% pluck(., "total", "raw_alpha") %>% round(., 3)
-my_bfi %>% select(!!Extraversion)      %>% psych::alpha(.) %>% pluck(., "total", "raw_alpha") %>% round(., 3)
-my_bfi %>% select(!!Neuroticism)       %>% psych::alpha(.) %>% pluck(., "total", "raw_alpha") %>% round(., 3)
-my_bfi %>% select(!!Openness)          %>% psych::alpha(.) %>% pluck(., "total", "raw_alpha") %>% round(., 3)
+my_bfi %>% select(!!composite_scores$Agreeableness)     %>% psych::alpha(.) # alpha for Agreeableness
+my_bfi %>% select(!!composite_scores$Conscientiousness) %>% psych::alpha(.) # alpha for Conscientiousness
+my_bfi %>% select(!!composite_scores$Extraversion)      %>% psych::alpha(.) # alpha for Extraversion
+my_bfi %>% select(!!composite_scores$Neuroticism)       %>% psych::alpha(.) # alpha for Neuroticism
+my_bfi %>% select(!!composite_scores$Openness)          %>% psych::alpha(.) # alpha for Openness
 
 
-################################ Function to extract alpha
-my_alpha <- function(variab) {
-  my_bfi %>% 
-    select({{ variab }}) %>% 
+
+# Function to extract alpha -----------------------------------------------
+
+my_alpha <- function(data, items) {
+  data %>% 
+    select(all_of(items)) %>% 
     psych::alpha() %>% 
     pluck(., "total", "raw_alpha") %>%
     round(., 2) %>% 
     print()
 }
 
+# Example with Neuroticism
 
-my_alpha(N1:N5)
+my_alpha(data = my_bfi, items = c("N1", "N2", "N3", "N4", "N5"))  # Way 1
+my_alpha(data = my_bfi, items = composite_scores$Neuroticism)     # Way 2
 
+# Iterate
 
-
-
-
-
-
-## QUI SOTTO INVECE QUELLO CHE VORREI FARE IDEALMENTE PER COMPOSITE SCORES E ALPHA
-
-# 1) creare oggetti con nomi item per ogni composite scores
-
-Agreeableness     <- c("A1_rev", "A2", "A3", "A4", "A5")
-Conscientiousness <- c("C1", "C2", "C3", "C4_rev", "C5_rev")
-Extraversion      <- c("E1_rev", "E2_rev", "E3", "E4", "E5")
-Neuroticism       <- c("N1", "N2", "N3", "N4", "N5")
-Openness          <- c("O1", "O2_rev", "O3", "O4", "O5_rev")
-
-# 2) creare un oggetto con tutti gli oggetti dei composite scores
-
-my_comp_scores <- c("Agreeableness", "Conscientiousness", "Extraversion", "Neuroticism", "Openness")
-
-# 3) "ciclizzare" la fase "Compute Composite scores"
-
-for(i in 1:length(my_comp_scores)) {
-  my_bfi %<>%
-    rowwise() %>%
-    mutate(
-      paste0(my_comp_scores[i]) = mean(my_comp_scores[i], na.rm = T)
-      ) %>%
-    ungroup()
-  }
+purrr::map(composite_scores, ~ my_alpha(my_bfi2, .))
 
 
-# 4) "ciclizzare" la fase "Compute alpha"
-
-for(i in 1:length(my_comp_scores)) {
-  my_bfi %>% select(my_comp_scores[i]) %>% psych::alpha(.)
-  }
-
-
-# esempio di apply per frequenze
-apply(my_bfi[c("O1", "O2")], 2, table)
+# Save workspace --------------------------------------------------------
 
 
 save.image("./data_wra.RData")
