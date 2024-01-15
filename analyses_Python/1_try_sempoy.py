@@ -76,10 +76,9 @@ print('Mean relative error: {:.3f}%'.format(
 pred.head()
 
 from semopy import semplot
-# I have to install this:
-#    pip install graphviz
-    import graphviz
+
+import graphviz
    
 
-g = semplot(m, filename='t.pdf')
+g = semplot(m, filename='C:/Users/Enrico Perinelli/Dropbox/GitHub_repos/data_wrangl_psych/analyses_Python/fig_semopy.pdf')
 g
